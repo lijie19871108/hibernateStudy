@@ -2,22 +2,17 @@ package com.tyyj.db.util;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@SuppressWarnings("deprecation")
+@Component
 public class HibernateUtil {
 
-	private static final SessionFactory sessionFactory;
+	@Autowired
+	private final SessionFactory sessionFactory=null;
 	
-	static{
-		try{
-			sessionFactory = new AnnotationConfiguration().configure("hibernate.cfg.xml").buildSessionFactory();
-		}
-		catch(Throwable ex){
-			System.err.println("initial sessionfactory creation failed."+ex);
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
-	
-	public static SessionFactory getSessionFactory(){
+	public  SessionFactory getSessionFactory(){
 		return sessionFactory;
 	}
 	

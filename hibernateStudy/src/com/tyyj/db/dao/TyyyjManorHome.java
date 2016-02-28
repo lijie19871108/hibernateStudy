@@ -6,8 +6,13 @@ import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tyyj.db.Entities.TyyjManor;
 
@@ -16,20 +21,23 @@ import com.tyyj.db.Entities.TyyjManor;
  * @see com.tyyj.db.Entities.TyyjManor
  * @author Hibernate Tools
  */
+@Repository
+@Transactional
 public class TyyyjManorHome {
 
 	private static final Log log = LogFactory.getLog(TyyyjManorHome.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
-
-	protected SessionFactory getSessionFactory() {
-		try {
-			return (SessionFactory) new InitialContext().lookup("SessionFactory");
-		} catch (Exception e) {
-			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
-		}
+	SessionFactory sessionFactory;
+	
+	@Autowired
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;//.openSession().getSessionFactory();
 	}
+	
+	public Session getCurrentSession(){
+		return sessionFactory.openSession();
+	}
+	
 
 	public void persist(TyyjManor transientInstance) {
 		log.debug("persisting TyyyjManor instance");
@@ -108,6 +116,19 @@ public class TyyyjManorHome {
 		try {
 			List results = sessionFactory.getCurrentSession().createCriteria("hibernate.TyyyjManor")
 					.add(Example.create(instance)).list();
+			log.debug("find by example successful, result size: " + results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by example failed", re);
+			throw re;
+		}
+	}
+	
+	@Cacheable(value="manorCache",key="")
+	public List findAll(){
+		log.debug("finding TyyyjManor instance by example");
+		try {
+			List results = getCurrentSession().createQuery(" from tyyj_manor").list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {

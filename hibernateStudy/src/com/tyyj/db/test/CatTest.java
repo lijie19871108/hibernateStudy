@@ -18,7 +18,7 @@ public class CatTest {
 		Cat mother = new Cat();
 		mother.setName("lijie cat");
 		mother.setDescription("get in 20160127 0009");
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = null;//HibernateUtil.getSessionFactory().openSession();
 		Transaction trans = session.beginTransaction();
 		session.persist(mother);
 		List<Cat> catlist = session.createQuery(" from Cat").list();

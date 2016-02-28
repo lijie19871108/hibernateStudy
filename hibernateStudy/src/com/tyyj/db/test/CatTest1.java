@@ -26,14 +26,14 @@ public class CatTest1 {
 				user.setUserName("lijuie");
 				fdsaf.setName("lijt");
 				fdsaf.setDescription("get in 20160127 0009");
-				Session session = HibernateUtil.getSessionFactory().openSession();
+				Session session=null;// = HibernateUtil.getSessionFactory().openSession();
 				Transaction trans = session.beginTransaction();
 				//session.persist(fdsaf);
 				session.persist(user);
 				trans.commit();
 				session.close();
 				
-				session = HibernateUtil.getSessionFactory().openSession();
+				session = null;//HibernateUtil.getSessionFactory().openSession();
 				trans = session.beginTransaction();
 				List<Cat> catlist = session.createQuery(" from Cat").list();
 				StringBuffer result = new StringBuffer();

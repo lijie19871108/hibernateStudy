@@ -6,14 +6,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.criteria.Order;
 
 import org.hibernate.annotations.GenericGenerator;
 
-@Entity
-@Table(name="tyyj_order",catalog="",schema="tyyj")
+
+@Entity(name="tyyj_order")
 public class TyyjOrder implements java.io.Serializable {
 
 	/**
@@ -26,8 +27,8 @@ public class TyyjOrder implements java.io.Serializable {
 	@GeneratedValue(generator="system-uuid")
 	private String id;
 	
-	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="activity_id")
+	@ManyToOne(cascade=CascadeType.ALL,targetEntity=TyyjActivity.class)
+	//@Column(name="activity_id")
 	private TyyjActivity activity;
 	
 	@Column(name="count", length=2, nullable=false)
@@ -42,8 +43,8 @@ public class TyyjOrder implements java.io.Serializable {
 	@Column(name="join_ways", length=2)
 	private int joinwway;
 	
-	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="user_id")
+	@ManyToOne(cascade=CascadeType.ALL, targetEntity=TyyjUser.class)
+	//@Column(name="user_id")
 	private TyyjUser buyer;
 	
 	public TyyjOrder(){}
