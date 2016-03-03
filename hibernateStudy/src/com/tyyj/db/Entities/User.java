@@ -27,6 +27,8 @@ public class User {
 	//@NotEmpty(message="ÃÜÂë²»ÄÜÎª¿Õ")
 	private String password;
 	
+	private String salt;
+
 	@ManyToMany
 	@JoinTable(name="t_user_role",joinColumns={@JoinColumn(name="user_id")},inverseJoinColumns={@JoinColumn(name="role_id")})
 	private List<Role> roleList;
@@ -35,6 +37,7 @@ public class User {
 	public Integer getId() {
 		return id;
 	}
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -56,6 +59,14 @@ public class User {
 	}
 	public void setRoleList(List<Role> roleList) {
 		this.roleList = roleList;
+	}
+	
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 	
 	public Set<String> getRolesName(){
